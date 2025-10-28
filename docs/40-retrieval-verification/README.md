@@ -40,9 +40,10 @@
 ## Diagram
 ```mermaid
 graph TD
-  Q[User Question] --> R[Hybrid Retrieve (vector + FT + KG)]
+  Q[User Question] --> R[Hybrid Retrieve: vector + FT + KG]
   R --> V[Verify sentence by sentence]
-  V -->|unsupported| X[Drop / “I don’t know”]
+  V -->|unsupported| X[Drop or "I don't know"]
   V -->|supported| G[Generate with citations]
   G --> A[Answer + Sources]
+
 
