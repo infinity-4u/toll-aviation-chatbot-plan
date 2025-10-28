@@ -5,7 +5,83 @@ site_url: https://infinity-4u.github.io/toll-aviation-chatbot-plan/
 
 # Repository
 repo_name: infinity-4u/toll-aviation-chatbot-plan
+repo_url: https://github.com/infinity-4u/toll-aviation-chatbot-plansite_name: Toll Aviation Chatbot Plan
+site_description: Planning repo for Toll Aviation chatbot (Ask-Docs + Contact)
+site_author: Toll Group
+site_url: https://infinity-4u.github.io/toll-aviation-chatbot-plan/
+
+# Repository
+repo_name: infinity-4u/toll-aviation-chatbot-plan
 repo_url: https://github.com/infinity-4u/toll-aviation-chatbot-plan
+
+# Theme
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+# Navigation
+nav:
+  - Home: index.md
+  - Overview: 00-overview/README.md
+  - Intents & Routing: 10-intents-routing/README.md
+  - Knowledge Graph Schema: 20-kg-schema/README.md
+  - Agents & MCP: 30-agents-mcp/README.md
+  - Retrieval & Verification: 40-retrieval-verification/README.md
+  - Contact Flows: 50-contact-flows/README.md
+  - Architecture: 60-architecture/architecture-v2.md
+  - Tech Stack & Infra: 70-tech-stack-infra/README.md
+  - Security & Privacy: 
+      - Overview: 80-security-privacy/README.md
+      - Guardrails: 80-security-privacy/guardrails.md
+  - Roadmap & SLO: 90-roadmap-slo/README.md
+
+# Plugins
+plugins:
+  - search
+  - mermaid2
+
+# Markdown Extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - tables
+  - attr_list
+  - md_in_html
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/infinity-4u/toll-aviation-chatbot-plan
 
 # Theme
 theme:
