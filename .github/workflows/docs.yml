@@ -3,10 +3,9 @@ name: Build & Deploy Docs (MkDocs)
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:
-  push:
     tags:
       - "plan-v*"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,7 +14,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -25,7 +24,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - run: pip install mkdocs mkdocs-material
+      - run: pip install mkdocs mkdocs-material pymdown-extensions
       - run: mkdocs build -d site
       - uses: actions/upload-pages-artifact@v3
         with:
