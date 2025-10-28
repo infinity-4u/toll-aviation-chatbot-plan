@@ -1,0 +1,21 @@
+site_name: Toll Aviation Chatbot Plan
+
+nav:
+  - Overview: docs/00-overview/README.md
+  - Intents & Routing: docs/10-intents-routing/README.md
+  - KG Schema: docs/20-kg-schema/README.md
+  - Agents & MCP: docs/30-agents-mcp/README.md
+  - Retrieval & Verification: docs/40-retrieval-verification/README.md
+  - Contact Flows: docs/50-contact-flows/README.md
+  - Architecture: docs/60-architecture/README.md
+  - Tech & Infra: docs/70-tech-stack-infra/README.md
+  - Security & Privacy: docs/80-security-privacy/README.md
+  - Roadmap & SLOs: docs/90-roadmap-slo/README.md
+
+theme:
+  name: material
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
