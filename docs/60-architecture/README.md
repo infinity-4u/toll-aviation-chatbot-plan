@@ -11,10 +11,10 @@
 ## Diagram
 ```mermaid
 flowchart LR
-  UI[Web UI (React/TS)] --> API[FastAPI]
+  UI[Web UI: React + TS] --> API[FastAPI API]
   API --> MCP[MCP Gateway]
-  MCP --> ORCH[Agent Orchestrator (LangGraph)]
-  ORCH --> NEO[(Neo4j 5\n vectors + full-text + KG)]
+  MCP --> ORCH[Agent Orchestrator: LangGraph]
+  ORCH --> NEO[(Neo4j 5: Vectors + Full-text + KG)]
   ORCH --> CAL[Calendar API]
   ORCH --> MAIL[Email API]
   ORCH --> CRM[(CRM API)]
