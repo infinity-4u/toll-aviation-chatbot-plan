@@ -1,5 +1,4 @@
 # MCP Lifecycle (Claude Host to Servers)
-
 ```mermaid
 sequenceDiagram
   participant U as User
@@ -8,7 +7,6 @@ sequenceDiagram
   participant K as KG Server
   participant C as Contact Server
   participant N as Neo4j
-
   U->>H: User message
   H->>D: tools/list
   D-->>H: tool metadata
@@ -21,7 +19,6 @@ sequenceDiagram
   N-->>D: quotes
   D-->>H: citations
   H-->>U: Answer + Sources
-
   alt contact intent
     H->>C: calendar.find_slots
     C-->>H: slots
@@ -33,3 +30,4 @@ sequenceDiagram
     C-->>H: confirmations
     H-->>U: booking confirmation
   end
+```
