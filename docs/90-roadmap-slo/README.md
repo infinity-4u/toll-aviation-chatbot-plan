@@ -1,30 +1,51 @@
-```md
 # Roadmap & SLOs
 
-## Phases (high level)
-1) **Foundation**  
-   - Ingest About/History + UAS/ACE pages into Neo4j (chunks + metadata).  
-   - Hybrid retrieval + citations.  
-2) **Contact flows**  
-   - Intake, triage, calendar slots, event creation, emails, CRM lead.  
-3) **KG enrichment**  
-   - Courses, simulators, platforms, bases; Related Topics UI.  
-4) **Hardening**  
-   - SSO, guardrails, reCAPTCHA, observability dashboards; Fabric-ready.
+## MVP Milestones
 
-## Service Levels (targets)
-- **Ask-Docs latency**: p95 ≤ 3s  
-- **Booking end-to-end**: p95 ≤ 6s  
-- **Citation accuracy**: ≥ 95%  
-- **Triage precision**: ≥ 90%  
-- **Booking completion (initiated)**: ≥ 60%
+### Phase 1: Core Documentation Q&A (Weeks 1-4)
+- Neo4j setup with vector + full-text indexes
+- Ingest Toll Aviation content (About, History, Services)
+- Basic retrieval + verification flow
+- Simple chat UI with citations
 
-## Quality checks
-- Sentence-level verification required for all claims.  
-- Refusal policy for operational/medical requests.  
-- Privacy consent must be confirmed before CRM upsert.
+### Phase 2: Contact Flows (Weeks 5-8)
+- Contact form intake + validation
+- Calendar integration (find slots, create events)
+- Email confirmations
+- CRM lead capture
+- Triage routing (Training, Media, Tenders, Ops-guarded)
 
-## Release tagging
-- Tag plan snapshots as `plan-vX.Y.Z`.  
-- Update `CHANGELOG.md` for each tag.  
-- Add/adjust ADRs when architectural decisions change.
+### Phase 3: Polish & Deploy (Weeks 9-12)
+- Security hardening (secrets, TLS, RBAC)
+- Observability (OpenTelemetry traces/metrics)
+- Load testing + optimization
+- Production deployment
+- Internal beta testing
+
+## Service Level Objectives (SLOs)
+
+### Availability
+- **Target**: 99.5% uptime (monthly)
+- **Measurement**: API health checks every 60s
+
+### Performance
+- **Ask-Docs queries**: p95 ≤ 3s end-to-end
+- **Booking flow**: p95 ≤ 6s (intake → confirmation)
+- **Measurement**: OpenTelemetry spans
+
+### Quality
+- **Citation accuracy**: ≥95% (human eval on sample queries)
+- **Booking completion rate**: ≥60% (users who start → complete)
+- **Measurement**: Manual review + funnel analytics
+
+### Safety
+- **Zero operational/medical SOP leaks** in production
+- **PII redaction**: 100% (automated + spot checks)
+
+## Future Enhancements (Post-MVP)
+
+- Multi-service expansion (Aeromedical, Defence, Fixed-Wing)
+- Advanced KG reasoning (multi-hop queries)
+- Voice interface integration
+- Multi-tenant isolation (Neo4j Fabric)
+- Real-time status updates for bookings
