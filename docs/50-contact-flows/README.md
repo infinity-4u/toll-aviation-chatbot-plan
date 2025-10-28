@@ -39,9 +39,10 @@ Politely refuse operational SOPs or real-time medical/flight guidance. Provide o
 - `crm.upsert_lead(lead_json)`
 - (router/guardrails are handled before these flows)
 
+```md
 ## Data contracts (examples)
 
-{**lead.json**
+**lead.json**
 ```json
 {
   "first_name": "",
@@ -73,14 +74,12 @@ event.json
 }
 }
 
-{
-Flow diagram
 graph TD
-  I[Intake] --> V[Validate + Consent]
-  V --> S[Propose 3 Slots (AET)]
-  S --> C{User Confirms?}
+  I[Intake] --> V[Validate and Consent]
+  V --> S[Propose 3 slots - AET]
+  S --> C{User confirms?}
   C -- Yes --> E[Create Event]
   E --> M[Send Confirmation Emails]
   M --> R[CRM Lead Upsert]
   C -- No --> S
-}
+
