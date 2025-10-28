@@ -1,6 +1,6 @@
 # Contact Flows
 
-## Fields (General “Contact us”)
+## Fields (General "Contact us")
 - First Name (required)
 - Last Name (required)
 - Email (required)
@@ -39,7 +39,6 @@ Politely refuse operational SOPs or real-time medical/flight guidance. Provide o
 - `crm.upsert_lead(lead_json)`
 - (router/guardrails are handled before these flows)
 
-```md
 ## Data contracts (examples)
 
 **lead.json**
@@ -57,9 +56,10 @@ Politely refuse operational SOPs or real-time medical/flight guidance. Provide o
   "tz": "Australia/Melbourne",
   "source": { "channel": "chatbot" }
 }
+```
 
-event.json
-
+**event.json**
+```json
 {
   "title": "Intro — {service}",
   "start": "",
@@ -72,8 +72,10 @@ event.json
   "notes": "Reason: ...",
   "reminders": [10]
 }
-}
+```
 
+## Flow Diagram
+```mermaid
 graph TD
   I[Intake] --> V[Validate and Consent]
   V --> S[Propose 3 slots - AET]
@@ -82,4 +84,5 @@ graph TD
   E --> M[Send Confirmation Emails]
   M --> R[CRM Lead Upsert]
   C -- No --> S
+```
 
