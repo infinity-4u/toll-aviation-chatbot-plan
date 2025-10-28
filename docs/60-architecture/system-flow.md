@@ -1,46 +1,50 @@
-flowchart LR
-  U([User]) --> H[Claude Code Host]
+# End-to-End System Flow
 
-  %% MCP clients to servers
+## Diagram
+```mermaid
+flowchart LR
+  U[User] --> H[Claude Code Host]
+
+  %% MCP servers
   H --> S1[Docs Server]
   H --> S2[KG Server]
   H --> S3[Contact Server]
   H --> S4[Guardrails Server]
 
-  %% Data plane
+  %% Data layer
   subgraph DATA[Data Layer]
-    N[(Neo4j 5\nKG + vectors + fulltext)]
-    R[(Redis Cache)]
+    N[Neo4j 5: KG + vectors + fulltext]
+    R[Redis Cache]
   end
 
   %% Ingestion
   subgraph INGEST[Ingestion]
     P[HTML pages]
-    C[Chunks + embeddings]
-    M[Metadata]
+    C[Chunks with embeddings]
+    M[Page metadata]
   end
 
   P --> C --> N
   M --> N
 
-  %% Servers to data/external
+  %% Server data access
   S1 --> N
   S2 --> N
 
-  subgraph EXTERNAL[External Services]
-    CAL[(Calendar API)]
-    MAIL[(Email API)]
-    CRM[(CRM API)]
+  %% External services
+  subgraph EXT[External Services]
+    CAL[Calendar API]
+    MAIL[Email API]
+    CRM[CRM API]
   end
 
   S3 --> CAL
   S3 --> MAIL
   S3 --> CRM
 
-  %% Answers and contact flows
+  %% Response paths
   S1 --> H
   S2 --> H
   S4 --> H
   S3 --> H
   H --> U
-
