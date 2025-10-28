@@ -1,30 +1,54 @@
-```md
 # MCP Servers & Configuration (Toll Aviation MVP)
 
-## Concrete server lineup
+## Concrete Server Lineup
 
 ### 1) toll-docs (HTTP) — Docs Server
-- **Tools:** `docs.search(query, scope, k)`, `verify.quote(text, chunk_ids)`
-- **Resources:** `docs://pages/...`, `docs://chunks/...`
-- **Reads:** Neo4j (chunks with embeddings, full-text, page metadata)
+
+**Tools:**
+- `docs.search(query, scope, k)`
+- `verify.quote(text, chunk_ids)`
+
+**Resources:**
+- `docs://pages/...`
+- `docs://chunks/...`
+
+**Reads:** Neo4j (chunks with embeddings, full-text, page metadata)
 
 ### 2) toll-kg (HTTP) — KG Server
-- **Tools:** `kg.query(cypher)`, `kg.expand(entities, depth)`
-- **Resources:** `kg://schema`, `kg://ontology`
-- **Reads:** Neo4j
+
+**Tools:**
+- `kg.query(cypher)`
+- `kg.expand(entities, depth)`
+
+**Resources:**
+- `kg://schema`
+- `kg://ontology`
+
+**Reads:** Neo4j
 
 ### 3) toll-contact (HTTP) — Contact Server
-- **Tools:** `calendar.find_slots`, `calendar.create_event`, `email.send`, `crm.upsert_lead`
-- **Resources/Prompts:** `/contact_intake` template, `/gdpr_notice`
-- **Backends:** Calendar provider, email gateway, CRM
+
+**Tools:**
+- `calendar.find_slots`
+- `calendar.create_event`
+- `email.send`
+- `crm.upsert_lead`
+
+**Resources/Prompts:**
+- `/contact_intake` template
+- `/gdpr_notice`
+
+**Backends:** Calendar provider, email gateway, CRM
 
 ### 4) toll-guard (HTTP) — Guardrails Server
-- **Tools:** `guardrails.screen(message)` for SOP/live-ops screening; returns decision + escalation text.
+
+**Tools:**
+- `guardrails.screen(message)` for SOP/live-ops screening
+- Returns decision + escalation text
 
 ---
 
-## Claude Code configuration (quick starts)
-
+## Claude Code Configuration (Quick Starts)
 ```bash
 # Docs Server (HTTP)
 claude mcp add --transport http toll-docs https://api.example.com/mcp/docs --scope project
@@ -40,3 +64,8 @@ claude mcp add --transport http toll-guard https://api.example.com/mcp/guard --s
 
 # Verify registrations
 claude mcp list
+```
+
+## Configuration Notes
+
+All servers use HTTP transport for production deployment. Replace `https://api.example.com` with your actual API endpoint.
