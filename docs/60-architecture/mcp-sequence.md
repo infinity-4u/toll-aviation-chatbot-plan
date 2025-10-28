@@ -34,3 +34,5 @@ sequenceDiagram
     C-->>H: confirmations
     H-->>U: booking confirmation
   end
+yaml
+Copy code
