@@ -23,11 +23,3 @@ graph TD
   RET --> VF[Verifier] --> OUT[Answer + citations]
   CT --> SCH[Scheduler] --> EVT[Create Event] --> EM[Email] --> CRM[Lead]
   GD --> SAFE[Refusal + official channels]
-
-4) Click **Commit changes**.
-
-💡 Note: those links point to pages we’ll add later; it’s fine if they 404 for now.
-
----
-
-Want me to walk you through adding the next doc section (e.g., `docs/30-agents-mcp/README.md`) the same slow way?
