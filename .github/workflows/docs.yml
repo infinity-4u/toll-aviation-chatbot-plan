@@ -21,11 +21,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - run: pip install mkdocs mkdocs-material pymdown-extensions
-      - run: mkdocs build -d site
+      
+      - name: Install MkDocs and plugins
+        run: |
+          pip install mkdocs
+          pip install mkdocs-material
+          pip install pymdown-extensions
+          pip install mkdocs-mermaid2-plugin
+      
+      - name: Build documentation
+        run: mkdocs build -d site
+      
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
