@@ -1,19 +1,29 @@
 # Intents & Routing
 
-**Intents**: ask_docs | contact_book | contact_call | contact_email | ops_guarded  
-**Service scope**: uas | ace | aero_fixed | defence | unknown
+## Intent Categories
 
-**How this maps to MCP tools**  
-- ask_docs → `docs.search` (+ optional `kg.expand`) → `verify.quote`  
-- contact_book / contact_call → `calendar.find_slots` → `calendar.create_event` → `email.send` → `crm.upsert_lead`  
-- contact_email → `email.send` → `crm.upsert_lead`  
-- ops_guarded → `guardrails.screen` + provide official channels
+**Intents:** `ask_docs` | `contact_book` | `contact_call` | `contact_email` | `ops_guarded`
+
+**Service scope:** `uas` | `ace` | `aero_fixed` | `defence` | `unknown`
+
+## How This Maps to MCP Tools
+
+- **ask_docs** → `docs.search` (+ optional `kg.expand`) → `verify.quote`
+- **contact_book / contact_call** → `calendar.find_slots` → `calendar.create_event` → `email.send` → `crm.upsert_lead`
+- **contact_email** → `email.send` → `crm.upsert_lead`
+- **ops_guarded** → `guardrails.screen` + provide official channels
 
 **See also:** [Agents & MCP Tools](../30-agents-mcp/README.md) • [Contact Flows](../50-contact-flows/README.md)
 
-## General Contact triage
-Training → ACE/UAS; Operational → ops_guarded; Media → media inbox; Tender → BD/Tenders; Other → manual.
+## General Contact Triage
 
+- **Training** → ACE/UAS
+- **Operational** → ops_guarded
+- **Media** → media inbox
+- **Tender** → BD/Tenders
+- **Other** → manual
+
+## Routing Flow
 ```mermaid
 graph TD
   UQ[User Input] --> RT[Router]
@@ -27,4 +37,4 @@ graph TD
   EVT --> EM[Email]
   EM --> CRM[Lead]
   GD --> SAFE[Refusal + official channels]
-
+```
