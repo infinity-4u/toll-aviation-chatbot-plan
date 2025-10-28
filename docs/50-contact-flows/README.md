@@ -41,7 +41,7 @@ Politely refuse operational SOPs or real-time medical/flight guidance. Provide o
 
 ## Data contracts (examples)
 
-**lead.json**
+{**lead.json**
 ```json
 {
   "first_name": "",
@@ -71,7 +71,9 @@ event.json
   "notes": "Reason: ...",
   "reminders": [10]
 }
+}
 
+{
 Flow diagram
 graph TD
   I[Intake] --> V[Validate + Consent]
@@ -81,4 +83,4 @@ graph TD
   E --> M[Send Confirmation Emails]
   M --> R[CRM Lead Upsert]
   C -- No --> S
-
+}
