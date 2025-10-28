@@ -28,7 +28,7 @@ nav:
   - Agents & MCP: 30-agents-mcp/README.md
   - Retrieval & Verification: 40-retrieval-verification/README.md
   - Contact Flows: 50-contact-flows/README.md
-  - Architecture: 60-architecture/README.md
+  - Architecture: 60-architecture/architecture-v2.md
   - Tech Stack & Infra: 70-tech-stack-infra/README.md
   - Security & Privacy: 80-security-privacy/README.md
   - Roadmap & SLO: 90-roadmap-slo/README.md
