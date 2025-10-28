@@ -41,7 +41,14 @@ nav:
   - Tech Stack & Infra: 70-tech-stack-infra/README.md
   - Security & Privacy: 
       - Overview: 80-security-privacy/README.md
-      - Guardrails: 80-security-privacy/guardrails.md
+      - Guardrails:
+          - Overview: 85-safety-governance/guardrails-overview.md
+          - 1. Reduce Hallucinations: 85-safety-governance/guardrails-1-reduce-hallucinations.md
+          - 2. Output Consistency: 85-safety-governance/guardrails-2-output-consistency.md
+          - 3. Mitigate Jailbreaks: 85-safety-governance/guardrails-3-mitigate-jailbreaks.md
+          - 4. Streaming Refusals: 85-safety-governance/guardrails-4-streaming-refusals.md
+          - 5. Reduce Prompt Leak: 85-safety-governance/guardrails-5-reduce-prompt-leak.md
+          - 6. Keep in Character: 85-safety-governance/guardrails-6-keep-in-character.md
   - Roadmap & SLO: 90-roadmap-slo/README.md
 
 # Plugins
