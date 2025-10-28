@@ -1,5 +1,4 @@
-```md
-# MCP Lifecycle (Claude Host ↔ Servers)
+# MCP Lifecycle (Claude Host to Servers)
 
 ```mermaid
 sequenceDiagram
@@ -23,7 +22,7 @@ sequenceDiagram
   D-->>H: citations
   H-->>U: Answer + Sources
 
-  alt intent is contact_*
+  alt contact intent
     H->>C: calendar.find_slots
     C-->>H: slots
     H-->>U: propose slots
@@ -34,5 +33,3 @@ sequenceDiagram
     C-->>H: confirmations
     H-->>U: booking confirmation
   end
-yaml
-Copy code
