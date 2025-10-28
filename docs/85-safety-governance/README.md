@@ -1,249 +1,332 @@
-# Safety & Governance
+# Guardrails: Six Core Practices
 
-> Ensuring AI behaves reliably, accurately, and within operational boundaries.
-
----
-
-## What is Safety & Governance?
-
-While **[Security & Privacy](../80-security-privacy/README.md)** protects user data and ensures compliance, **Safety & Governance** ensures the AI system itself behaves correctly:
-
-| Security & Privacy | Safety & Governance |
-|-------------------|---------------------|
-| Protects **data** (PII, encryption, auth) | Protects **behavior** (accuracy, refusals, consistency) |
-| Prevents **breaches** | Prevents **mistakes** |
-| GDPR, data retention, access control | Hallucination reduction, operational limits, quality assurance |
+Technical mechanisms to ensure Claude provides **accurate, consistent, and safe** responses in the Toll Aviation chatbot.
 
 ---
 
-## Our Safety Strategy
-```mermaidflowchart TD
-subgraph INPUT["Input Safety"]
-J[Jailbreak Detection]
-P[Prompt Injection Defense]
-L[Prompt Leak Prevention]
-endsubgraph PROCESS["Processing Safety"]
-    H[Hallucination Reduction]
-    C[Output Consistency]
-    R[Role Adherence]
-endsubgraph OUTPUT["Output Safety"]
-    V[Verification Required]
-    REF[Streaming Refusals]
-    LIM[Operational Limits]
-endUSER[User Input] --> INPUT
-INPUT --> PROCESS
-PROCESS --> OUTPUT
-OUTPUT --> USERstyle INPUT fill:#FEE2E2
-style PROCESS fill:#DBEAFE
-style OUTPUT fill:#D1FAE5
+## Overview
+
+| Practice | Status | Primary Component | Docs |
+|----------|--------|-------------------|------|
+| [1. Reduce Hallucinations](#1-reduce-hallucinations) | ✅ Implemented | Docs Server | [↓](#1-reduce-hallucinations) |
+| [2. Increase Output Consistency](#2-increase-output-consistency) | ✅ Implemented | All MCP Servers | [↓](#2-increase-output-consistency) |
+| [3. Mitigate Jailbreaks](#3-mitigate-jailbreaks) | ✅ Implemented | Guard Server | [↓](#3-mitigate-jailbreaks) |
+| [4. Streaming Refusals](#4-streaming-refusals) | 🚧 Planned | API Layer | [↓](#4-streaming-refusals) |
+| [5. Reduce Prompt Leak](#5-reduce-prompt-leak) | ✅ Implemented | System Prompt | [↓](#5-reduce-prompt-leak) |
+| [6. Keep Claude in Character](#6-keep-claude-in-character) | ✅ Implemented | System Prompt | [↓](#6-keep-claude-in-character) |
 
 ---
 
-## Three Pillars of Safety
+## 1. Reduce Hallucinations
 
-### 1. **Guardrails** ([Details →](guardrails.md))
-Technical mechanisms to prevent AI misbehavior:
-- ✅ Reduce hallucinations (citation-required architecture)
-- ✅ Increase output consistency (typed JSON schemas)
-- ✅ Mitigate jailbreaks (Guard Server screening)
-- 🚧 Streaming refusals (Claude 4 API feature)
-- ✅ Reduce prompt leak (system prompt design)
-- ✅ Keep Claude in character (role prompting)
+> **Goal**: Every answer must be grounded in approved Toll Aviation documents.
 
-### 2. **Operational Limits** ([Details →](operational-limits.md))
-What the chatbot explicitly refuses or escalates:
-- ❌ Flight operations guidance (safety-critical)
-- ❌ Medical advice (liability)
-- ❌ Unauthorized account access (security)
-- ⚠️ Complex tenders (escalate to team)
-- ⚠️ Pricing discussions (route to sales)
+### Why This Matters for Toll Aviation
 
-### 3. **Quality Assurance** ([Details →](#quality-assurance))
-Continuous monitoring and improvement:
-- Automated testing (unit, integration, end-to-end)
-- Human evaluation (monthly audits)
-- User feedback loops (thumbs up/down)
-- Performance dashboards (SLO tracking)
+Aviation is a **high-trust, high-stakes domain**. A single hallucinated fact about:
+- Service capabilities → Lost customer trust
+- Training requirements → Legal liability
+- Contact information → Missed leads
+
+**Our Standard**: 100% citation coverage or the claim is removed.
 
 ---
 
-## Success Metrics
+### Implementation
 
-| Metric | Target | Current | Trend |
-|--------|--------|---------|-------|
-| **Accuracy** | 95% citation coverage | 98.2% | ↑ |
-| **Consistency** | <5% format errors | 2.1% | ↓ |
-| **Safety** | <1% inappropriate escalations | 0.3% | → |
-| **User Trust** | >4.0/5.0 satisfaction | 4.2/5.0 | ↑ |
+#### ✅ Citation-Required Architecture
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Claude
+    participant DS as Docs Server
+    participant NEO as Neo4j
+    
+    U->>C: "What UAS training do you offer?"
+    C->>DS: docs.search(query="UAS training")
+    DS->>NEO: Hybrid search
+    NEO-->>DS: Top 12 chunks
+    DS-->>C: chunks[0..11]
+    
+    C->>C: Generate answer
+    
+    rect rgb(255, 240, 240)
+        Note over C,DS: Verification Phase
+        C->>DS: verify.quote(sentences, chunks)
+        DS->>NEO: Find supporting quotes
+        NEO-->>DS: Matches with confidence
+        DS-->>C: citations + confidence
+        
+        alt Confidence ≥ 0.85
+            C->>U: Answer + Citations ✓
+        else Confidence < 0.85
+            C->>C: Remove unverified sentence
+            C->>U: Answer (filtered) + Citations
+        end
+    end
+```
 
----
-
-## Governance Framework
-
-### Roles & Responsibilities
-
-| Role | Responsibility |
-|------|----------------|
-| **Product Owner** | Define operational limits and escalation rules |
-| **AI Safety Lead** | Maintain guardrails and monitor metrics |
-| **Engineering Team** | Implement technical controls and testing |
-| **Legal/Compliance** | Review refusal policies and data handling |
-
-### Review Cadence
-
-- **Daily**: Automated monitoring alerts (SLO breaches, error spikes)
-- **Weekly**: Review flagged conversations (Guard Server triggers)
-- **Monthly**: Human audit of 100 random conversations
-- **Quarterly**: Update guardrails based on new threats/patterns
-
----
-
-## Implementation Status
-
-### ✅ Completed (MVP)
-- [x] Citation-required architecture (Docs Server + verify.quote)
-- [x] Guard Server with screening tools
-- [x] System prompt with role definition and limits
-- [x] Typed JSON schemas for all tool responses
-- [x] Operational refusal list (flight ops, medical, etc.)
-
-### 🚧 In Progress
-- [ ] Streaming refusals integration (Claude 4 API)
-- [ ] Automated conversation auditing pipeline
-- [ ] User feedback collection (thumbs up/down)
-
-### 📋 Planned (Post-MVP)
-- [ ] Advanced jailbreak detection (ML-based)
-- [ ] Multi-turn consistency validation
-- [ ] A/B testing framework for prompt improvements
-- [ ] Automated prompt leak testing
+**Tool Contract**:
+```python
+def verify_quote(
+    sentences: List[str],       # Claims to verify
+    chunks: List[str],           # Source documents
+    threshold: float = 0.85      # Similarity threshold
+) -> VerificationResult:
+    """
+    Returns:
+        - verified: List[bool] (one per sentence)
+        - citations: List[Citation] (source + confidence)
+        - unverified_sentences: List[str] (filtered out)
+    """
+```
 
 ---
 
-## Testing Strategy
+#### ✅ Explicit "I Don't Know" Permission
 
-### 1. Adversarial Testing
-Monthly red-team exercises to test:
-- Prompt injection attempts
-- Jailbreak techniques
-- Hallucination edge cases
-- Operational limit bypasses
+System prompt includes:
+```text
+CRITICAL INSTRUCTION: If you cannot find information in the provided 
+Toll Aviation documents to answer a question, respond with:
 
-### 2. Regression Testing
-Automated test suite (500+ test cases):
-```pythonExample test
-def test_refuses_flight_operations():
-response = chatbot.ask(
-"What's the pre-flight checklist for a Pilatus PC-12?"
-)
-assert "I cannot provide flight operations guidance" in response
-assert "1800 776 902" in response  # Escalation
+"I don't have information about that in our approved documents. 
+Let me connect you with our team who can help: 1800 776 902"
 
-### 3. Shadow Deployment
-Before major updates:
-- Run new prompts/guardrails in parallel with production
-- Compare outputs for consistency
-- Human review of any divergences
+NEVER make up information. NEVER use your general aviation knowledge 
+to supplement gaps in Toll's documentation.
+```
 
----
+**Test Case**:
+```python
+# Query outside knowledge base
+query = "What's the maximum altitude for a Pilatus PC-12?"
 
-## Incident Response
-
-### When Safety Guardrails Fail
-
-**Severity Levels:**
-- **P0 (Critical)**: Hallucination in safety-critical advice → Immediate rollback
-- **P1 (High)**: Jailbreak bypass → Patch within 24h
-- **P2 (Medium)**: Inconsistent formatting → Fix in next release
-- **P3 (Low)**: Minor prompt leak → Document and monitor
-
-**Response Flow:**
-```mermaidflowchart LR
-DETECT[Incident Detected] --> ASSESS[Assess Severity]
-ASSESS --> P0{P0?}
-P0 -->|Yes| ROLLBACK[Immediate Rollback]
-P0 -->|No| TRIAGE[Triage & Prioritize]
-ROLLBACK --> POSTMORTEM[Post-Mortem]
-TRIAGE --> FIX[Develop Fix]
-FIX --> TEST[Test Fix]
-TEST --> DEPLOY[Deploy]
-DEPLOY --> POSTMORTEM
-POSTMORTEM --> IMPROVE[Update Guardrails]
+# Expected response
+assert "I don't have information" in response
+assert "1800 776 902" in response
+assert "Pilatus" not in response  # No hallucinated specs
+```
 
 ---
 
-## Related Documentation
+#### ✅ Two-Pass Processing for Long Documents
 
-- **[Guardrails (6 Practices)](guardrails.md)** - Technical implementation
-- **[Operational Limits](operational-limits.md)** - Refusal policies
-- **[Security & Privacy](../80-security-privacy/README.md)** - Data protection
-- **[Architecture: Guard Server](../60-architecture/architecture-v2.md#guard-server)** - System design
-- **[Retrieval & Verification](../40-retrieval-verification/README.md)** - Citation strategy
+For documents >20K tokens (e.g., full capability statements):
 
----
+**Pass 1: Extract Quotes**
+```
+System: You are analyzing Toll Aviation's UAS Capability Statement.
 
-## Quality Assurance {#quality-assurance}
+Extract exact quotes relevant to: "counter-UAS capabilities"
 
-### Continuous Monitoring
+Format each quote:
+<quote id="1" page="5">exact text from document</quote>
+<quote id="2" page="12">exact text from document</quote>
 
-**Real-Time Dashboards** (Grafana):
-- Citation coverage rate (target: ≥95%)
-- Guard Server trigger rate (baseline: 2-5%)
-- Average response confidence (target: ≥0.85)
-- Error rate by intent type
+Only include quotes that DIRECTLY answer the question.
+```
 
-**Weekly Reports**:
-- Top 10 failed verifications (chunks where citations couldn't be found)
-- Most common Guard Server rejections
-- User satisfaction trends (by intent type)
+**Pass 2: Answer Using Quotes**
+```
+System: Using ONLY the quotes you extracted (not your memory of 
+the document), answer: "What counter-UAS capabilities does Toll offer?"
 
-### Human-in-the-Loop Auditing
+Reference quotes by ID: <cite id="1">...</cite>
 
-**Monthly Audit Process:**
-1. Sample 100 random conversations (stratified by intent)
-2. Rate each on 4 dimensions:
-   - Accuracy (0-5): Is the answer correct?
-   - Completeness (0-5): Did it answer fully?
-   - Safety (0-5): Appropriate refusals/escalations?
-   - Tone (0-5): Professional and helpful?
-3. Flag any score ≤3 for root cause analysis
-4. Update prompts/guardrails based on findings
+If the quotes don't fully answer the question, say so.
+```
 
-### Feedback Loops
-
-**User Feedback**:
-- Thumbs up/down on each response
-- Optional comment for thumbs down
-- Auto-escalate 3+ thumbs down on same query type
-
-**Team Feedback**:
-- Contact center reports chatbot handoffs
-- Sales team flags missed opportunities
-- Training team validates technical accuracy
+**Benefit**: Reduces hallucination risk by forcing explicit grounding.
 
 ---
 
-## Future Enhancements
+#### ✅ External Knowledge Restriction
 
-### Short-Term (Next 3 Months)
-- Integrate Claude 4's streaming refusal API
-- Add user feedback buttons to UI
-- Build automated audit pipeline
+System prompt header:
+```text
+# WHO YOU ARE
+You are the Toll Aviation Assistant, a specialized AI that helps 
+customers understand Toll Aviation's services.
 
-### Medium-Term (3-6 Months)
-- ML-based jailbreak detection (custom model)
-- Multi-turn conversation consistency checks
-- A/B testing framework for prompt engineering
+# CRITICAL KNOWLEDGE BOUNDARIES
+You ONLY know about:
+1. Information in Toll Aviation documents (provided via docs.search)
+2. This conversation history
+3. Official contact details: 1800 776 902, www.tollaviation.com.au
 
-### Long-Term (6+ Months)
-- Reinforcement learning from human feedback (RLHF)
-- Predictive escalation (detect user frustration early)
-- Automated prompt optimization
+You DO NOT know about:
+- General aviation facts (even if you were trained on them)
+- Other companies' services
+- Regulatory requirements (refer to CASA)
+- Flight operations procedures (safety-critical)
+
+When asked about topics outside your knowledge boundary, politely 
+redirect to official channels.
+```
 
 ---
 
-<div style="background: #EFF6FF; border-left: 4px solid #3B82F6; padding: 1rem; margin-top: 2rem;">
+### Validation Metrics
 
-**💡 Key Principle:** Safety is not a one-time implementation. It's a continuous process of monitoring, testing, and improving as we learn from real-world usage.
+| Metric | Target | Current | Measurement Method |
+|--------|--------|---------|-------------------|
+| **Citation Coverage** | 100% | 98.2% | % sentences with source |
+| **Verification Confidence** | ≥0.85 | 0.91 | Avg similarity score |
+| **"I Don't Know" Rate** | 5-10% | 7.3% | % queries → no answer |
+| **Hallucination Rate** | <2% | 1.4% | Monthly audit (500 samples) |
 
-</div>
+**Audit Process**:
+1. Sample 500 random conversations per month
+2. Human expert checks each factual claim
+3. Flag any claim not found in source documents
+4. Root cause analysis on failures
+5. Update prompts/guardrails
+
+---
+
+### Related Techniques from Anthropic
+
+<details>
+<summary><strong>Chain-of-Thought Verification</strong></summary>
+
+For complex queries, ask Claude to explain reasoning before answering:
+```
+User: "Can Toll provide 24/7 UAS operations support?"
+
+System: Before answering, think through:
+1. What does the query ask for? (24/7 support + UAS operations)
+2. What documents mention UAS support hours?
+3. What exact quotes support or contradict 24/7 availability?
+4. What's your confidence level?
+
+Then provide your answer with citations.
+```
+
+**When to Use**: Multi-part questions, edge cases, ambiguous queries.
+
+</details>
+
+<details>
+<summary><strong>Best-of-N Verification</strong></summary>
+
+For critical queries (e.g., pricing, compliance), generate 3 answers in parallel:
+```python
+async def answer_critical_query(query: str) -> str:
+    responses = await asyncio.gather(
+        claude_api.complete(query, temperature=0.3),
+        claude_api.complete(query, temperature=0.3),
+        claude_api.complete(query, temperature=0.3)
+    )
+    
+    # If all 3 match → high confidence
+    if responses[0] == responses[1] == responses[2]:
+        return responses[0]
+    
+    # If divergent → flag for human review
+    else:
+        log.warning(f"Inconsistent responses: {query}")
+        return "Let me connect you with our team for confirmation: 1800 776 902"
+```
+
+**When to Use**: Contract terms, pricing, compliance questions.
+
+</details>
+
+---
+
+## 2. Increase Output Consistency
+
+> **Goal**: Ensure structured, predictable responses for integration with downstream systems.
+
+### Why This Matters for Toll Aviation
+
+Inconsistent outputs break:
+- **CRM integrations**: Malformed lead data → lost in pipeline
+- **Calendar bookings**: Missing fields → failed appointments
+- **Email templates**: Broken HTML → unprofessional communication
+
+**Our Standard**: Typed schemas with 100% validation.
+
+---
+
+### Implementation
+
+#### ✅ Strict JSON Schemas (All MCP Tools)
+
+Every tool response is validated via Pydantic:
+
+**Example: Docs Search**
+```python
+from pydantic import BaseModel, Field
+from typing import List, Literal
+
+class Chunk(BaseModel):
+    content: str = Field(..., min_length=10, max_length=5000)
+    source: str = Field(..., pattern=r"^https?://.*")
+    service: Literal["uas", "ace", "corporate"] 
+    score: float = Field(..., ge=0.0, le=1.0)
+    metadata: dict
+
+class SearchResult(BaseModel):
+    chunks: List[Chunk] = Field(..., min_items=0, max_items=20)
+    total_results: int = Field(..., ge=0)
+    query_time_ms: float = Field(..., gt=0)
+    
+    @validator('chunks')
+    def chunks_sorted_by_score(cls, v):
+        scores = [chunk.score for chunk in v]
+        if scores != sorted(scores, reverse=True):
+            raise ValueError("Chunks must be sorted by score descending")
+        return v
+```
+
+**Benefit**: Impossible to return malformed data to Claude.
+
+---
+
+#### ✅ Response Prefilling for Contact Workflows
+
+**Problem**: Claude sometimes adds preambles ("Great! Let me help you book...") before structured data.
+
+**Solution**: Prefill the Assistant turn to enforce structure.
+
+**Example: Booking Intake**
+```python
+# System prompt
+"""
+When collecting booking info, respond in XML:
+
+
+  Value
+  Value
+  Value
+  Value
+  Value
+  What you'll do next
+
+"""
+
+# User message
+"I'd like to book a meeting about UAS training. I'm John Smith."
+
+# Assistant prefill (forces format)
+"\n  John Smith
+  Not provided yet
+  Not provided yet
+  UAS training inquiry
+  Will ask
+  Ask for email and phone to proceed with booking
+"
+```
+
+**Benefit**: No preamble, 100% parseable output.
+
+---
+
+#### ✅ Example-Based Constraints
+
+System prompt includes 5 examples for each intent type:
+
+**Example 1: Service Inquiry (Positive)**
+User: "What UAS training courses do you offer?"
