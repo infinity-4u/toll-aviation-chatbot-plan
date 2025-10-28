@@ -1,13 +1,19 @@
+```yaml
 site_name: Toll Aviation Chatbot Plan
 
 nav:
   - Overview: 00-overview/README.md
   - Intents & Routing: 10-intents-routing/README.md
   - KG Schema: 20-kg-schema/README.md
-  - Agents & MCP: 30-agents-mcp/README.md
+  - Agents & MCP:
+      - Overview: 30-agents-mcp/README.md
+      - Servers & Config: 30-agents-mcp/servers-and-config.md
   - Retrieval & Verification: 40-retrieval-verification/README.md
   - Contact Flows: 50-contact-flows/README.md
-  - Architecture: 60-architecture/README.md
+  - Architecture:
+      - Overview: 60-architecture/README.md
+      - System Flow: 60-architecture/system-flow.md
+      - MCP Lifecycle: 60-architecture/mcp-sequence.md
   - Tech & Infra: 70-tech-stack-infra/README.md
   - Security & Privacy: 80-security-privacy/README.md
   - Roadmap & SLOs: 90-roadmap-slo/README.md
