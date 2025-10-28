@@ -1,9 +1,16 @@
 # Knowledge Strategy & Schema (One KG)
 
-**Choice**: Single Neo4j database / ontology with **service-scoped subgraphs**. Fabric-ready to split later.
+## Strategy Choice
 
-**Backbone**: Org, Service, Program/Contract, Capability, Platform/AssetType, Fleet, Base/Facility→Place, Course, Simulator, Certification, ClientOrg, Event, Award, KPI, Page/Section/Chunk{embedding}, Source.
+Single Neo4j database / ontology with **service-scoped subgraphs**. Fabric-ready to split later.
 
-**Timeline**: (:Org)-[:ACHIEVED]->(:Event {label, year_start, year_end, notes})
+## Backbone Entities
 
-**Split triggers**: legal isolation; cross-links <5% for 90 days; p95 breaches.
+- **Organization:** Org, Service, Program/Contract, Capability, ClientOrg
+- **Operations:** Platform/AssetType, Fleet, Base/Facility→Place
+- **Training:** Course, Simulator, Certification
+- **Content:** Page/Section/Chunk{embedding}, Source
+- **Tracking:** Event, Award, KPI
+
+## Timeline Model
+```cypher
