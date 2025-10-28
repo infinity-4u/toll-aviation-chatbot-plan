@@ -1,3 +1,7 @@
+```md
+# MCP Lifecycle (Claude Host ↔ Servers)
+
+```mermaid
 sequenceDiagram
   participant U as User
   participant H as Claude Host
@@ -6,27 +10,27 @@ sequenceDiagram
   participant C as Contact Server
   participant N as Neo4j
 
-  U->>H: Message
-  H->>D: initialize (negotiate capabilities)
-  D-->>H: ready (tools/resources/prompts)
+  U->>H: User message
   H->>D: tools/list
   D-->>H: tool metadata
-  H->>D: tools/call docs.search
-  D->>N: query (vector + fulltext + filters)
+  H->>D: docs.search
+  D->>N: query (vector + fulltext)
   N-->>D: chunks
-  D-->>H: content
-  H->>D: tools/call verify.quote
+  D-->>H: chunks
+  H->>D: verify.quote
   D->>N: find quotes
+  N-->>D: quotes
   D-->>H: citations
-  H-->>U: Answer and Sources
+  H-->>U: Answer + Sources
 
-  rect rgb(245,245,245)
-  Note over H: if intent = contact_*
-  H->>C: tools/call calendar.find_slots
-  C-->>H: slots
-  H-->>U: propose slots
-  U-->>H: confirm
-  H->>C: calendar.create_event / email.send / crm.upsert
-  C-->>H: confirmation
-  H-->>U: confirmation
+  alt intent is contact_*
+    H->>C: calendar.find_slots
+    C-->>H: slots
+    H-->>U: propose slots
+    U-->>H: confirm
+    H->>C: calendar.create_event
+    H->>C: email.send
+    H->>C: crm.upsert_lead
+    C-->>H: confirmations
+    H-->>U: booking confirmation
   end
