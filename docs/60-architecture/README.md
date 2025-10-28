@@ -1,6 +1,7 @@
 # Architecture
 
 ## Components
+
 - **Frontend**: React + TypeScript (chat UI, citations, forms)
 - **API**: FastAPI
 - **Orchestrator**: LangGraph (agents)
@@ -8,7 +9,7 @@
 - **Integrations via MCP**: Calendar, Email, CRM
 - **Observability**: OpenTelemetry (metrics/logs/traces)
 
-## Diagram
+## System Diagram
 ```mermaid
 flowchart LR
   UI[Web UI: React + TS] --> API[FastAPI API]
@@ -19,3 +20,4 @@ flowchart LR
   ORCH --> MAIL[Email API]
   ORCH --> CRM[(CRM API)]
   API --> REDIS[(Redis Cache)]
+```
