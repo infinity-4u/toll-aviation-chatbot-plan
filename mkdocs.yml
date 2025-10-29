@@ -50,6 +50,8 @@ nav:
           - 5. Reduce Prompt Leak: 85-safety-governance/guardrails-5-reduce-prompt-leak.md
           - 6. Keep in Character: 85-safety-governance/guardrails-6-keep-in-character.md
   - Roadmap & SLO: 90-roadmap-slo/README.md
+  - Implementation:
+      - MVP Plan: 95-implementation/mvp-implementation-plan.md
 
 # Plugins
 plugins:
